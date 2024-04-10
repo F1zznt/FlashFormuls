@@ -1,10 +1,18 @@
-import json
-
 from flask import Flask, request
 from flask_ngrok import run_with_ngrok
 
+import json
+
+
 app = Flask(__name__)
 run_with_ngrok(app)
+
+gamemode = {
+    "Формулы": {
+    },
+    "Экзамены": {
+    }
+}
 
 
 def pick_mode(user_id: str, req: dict, res: dict):
@@ -27,13 +35,13 @@ def end_game(user_id: str, req: dict, res: dict):
 @app.route("\post", methods=["POST"])
 def get_alice_requests():
     response = {
-        "session": requests.json["session"],
-        "version": requests.json["version"],
+        "session": request.json["session"],
+        "version": request.json["version"],
         "response": {
             "end_session": False,
         }
     }
-    handle_dialog(requests.json, response)
+    handle_dialog(request.json, response)
     return json.dumps(response)
 
 
@@ -47,7 +55,7 @@ def handle_dialog(req: dict, res: dict):
             "state": 1
         }
         return
-    states[session_state[user_id]]["state"](user_id, req, res)
+    states[session_state[user_id]["state"]](user_id, req, res)
 
 
 states = {
