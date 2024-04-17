@@ -5,8 +5,6 @@ import json
 
 
 app = Flask(__name__)
-run_with_ngrok(app)
-
 
 
 def pick_mode(user_id: str, req: dict, res: dict):
